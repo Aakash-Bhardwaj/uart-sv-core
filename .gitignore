@@ -13,6 +13,7 @@ dev_log.txt
 build/
 
 # Yosys
+*_synth.v
 *.json
 *.dot
 

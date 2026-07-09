@@ -60,12 +60,27 @@ Verification shall follow a layered approach consisting of:
 
 ## 5. Functional Test Cases
 
-The functional test cases for each module will be documented during implementation.
+The following test cases shall be implemented as self-checking testbenches.
 
-- Baud Generator
-- UART Transmitter
-- UART Receiver
-- Top-Level UART
+### 5.1 Baud Generator
+
+Verified using a self-checking SystemVerilog testbench.
+
+Verified properties:
+
+- Reset behaviour
+- First baud tick timing
+- Tick periodicity
+- One-clock pulse width
+- 100 consecutive baud intervals
+- Parameter validation
+- Self-checking
+
+### 5.2 UART Transmitter
+
+### 5.3 UART Receiver
+
+### 5.4 Top-Level UART
 
 ## 6. Assertions
 

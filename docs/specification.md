@@ -18,6 +18,7 @@ The UART SV Core shall:
 - Support parameterized system clock frequency.
 - Support parameterized baud rate.
 - Support parameterized data width.
+- Validate the parameters.
 - Transmit one start bit.
 - Transmit one stop bit.
 - Transmit data LSB first.

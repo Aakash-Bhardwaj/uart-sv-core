@@ -67,6 +67,22 @@ Incoming serial data is synchronized, sampled at the configured baud rate, and r
 
 ## 5. Baud Generator
 
+The baud generator produces a one-clock-cycle `baud_tick` pulse that is used as a clock-enable signal throughout the UART. No derived clock is generated.
+
+The baud generator consists of:
+
+- A parameterized counter
+- Terminal count detection
+- Combinational tick generation
+
+The baud divisor is calculated as:
+
+`DIVISOR = CLOCK_FREQ_HZ / BAUD_RATE`
+
+The counter increments every system clock cycle and resets upon reaching DIVISOR−1. A combinational comparator asserts `baud_tick` for one clock cycle whenever the terminal count is reached.
+
+This architecture maintains a single clock domain and avoids internally generated clocks.
+
 ## 6. UART Transmitter
 
 ## 7. UART Receiver

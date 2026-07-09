@@ -24,9 +24,9 @@ This project emphasizes correctness, modularity, parameterization, and reproduci
 
 ### Version 1
 
-- [ ] Parameterized clock frequency
-- [ ] Parameterized baud rate
-- [ ] Parameterized data width
+- [x] Parameterized clock frequency
+- [x] Parameterized baud rate
+- [x] Parameterized data width
 - [ ] UART transmitter
 - [ ] UART receiver
 - [ ] Full-duplex operation
@@ -53,6 +53,7 @@ rtl/            Synthesizable SystemVerilog RTL
 tb/             Testbenches
 docs/           Design documentation
 constraints/    Timing constraints
+scripts/        Utility scripts
 ```
 
 ---
@@ -95,9 +96,11 @@ Documentation
 ## Project Status
 
 - [x] Repository initialized
-- [ ] Design specification
-- [ ] Architecture
-- [ ] Baud generator
+- [x] Design specification
+- [x] Architecture
+- [x] Baud generator RTL
+- [x] Baud generator verification
+- [x] Baud generator synthesis
 - [ ] UART transmitter
 - [ ] UART receiver
 - [ ] Top-level integration
