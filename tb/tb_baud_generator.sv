@@ -7,15 +7,15 @@ module tb_baud_generator #(
     parameter int NUM_TICKS_TO_VERIFY = 100
 );
 
-    // Local parameters for reference and timing [cite: 15, 16]
+    // Local parameters for reference and timing
     localparam int EXPECTED_DIVISOR = CLOCK_FREQ_HZ / BAUD_RATE;
     localparam real CLOCK_PERIOD_NS = 1.0e9 / CLOCK_FREQ_HZ;
     localparam real HALF_PERIOD_NS  = CLOCK_PERIOD_NS / 2.0;
     
-    // Generous timeout based on expected runtime
+    // Timeout based on expected runtime
     localparam int TIMEOUT_CYCLES = 10 + ((NUM_TICKS_TO_VERIFY + 2) * EXPECTED_DIVISOR);
 
-    // DUT signals [cite: 17, 18]
+    // DUT signals
     logic clk;
     logic rst_n;
     logic baud_tick;
@@ -25,7 +25,7 @@ module tb_baud_generator #(
     int tests_passed;
     int tests_failed;
 
-    // DUT instantiation [cite: 19]
+    // DUT instantiation
     baud_generator #(
         .CLOCK_FREQ_HZ(CLOCK_FREQ_HZ),
         .BAUD_RATE(BAUD_RATE)
@@ -35,11 +35,11 @@ module tb_baud_generator #(
         .baud_tick(baud_tick)
     );
 
-    // Clock generation [cite: 20]
+    // Clock generation
     initial clk = 1'b0;
     always #(HALF_PERIOD_NS) clk = ~clk;
 
-    // Waveform generation [cite: 22]
+    // Waveform generation
     initial begin
         $dumpfile("baud_generator_waveform.vcd");
         $dumpvars(0, tb_baud_generator);
@@ -51,7 +51,7 @@ module tb_baud_generator #(
         $fatal(1, "[TIMEOUT] Simulation timed out after %0d cycles. Measurement logic failed.", TIMEOUT_CYCLES);
     end
 
-    // Helper Task: Record test results clearly
+    // Record test results
     task automatic record_test(input string test_name, input bit passed);
         begin
             tests_run++;
@@ -64,7 +64,7 @@ module tb_baud_generator #(
         end
     endtask
 
-    // Helper Task: Run the synchronous measurement algorithm
+    // Verification
     task automatic verify_tick(input int tick_number);
         automatic int cycles = 0;
         begin

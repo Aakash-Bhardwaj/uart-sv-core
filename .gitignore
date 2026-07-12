@@ -5,6 +5,7 @@
 *.log
 *.out
 *.gtkw
+sim/
 
 # Personal Development Journal
 dev_log.txt
