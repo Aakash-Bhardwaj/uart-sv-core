@@ -1,0 +1,23 @@
+# Yosys synthesis script for Baud Generator
+
+# Read RTL
+read_verilog -sv rtl/uart_tx.sv
+
+# Set top module
+hierarchy -top uart_tx
+
+# Generic synthesis
+proc
+opt
+fsm
+opt
+memory
+opt
+
+synth
+
+# Statistics
+stat
+
+# Write synthesized netlist
+write_verilog reports/uart_tx_synth.v

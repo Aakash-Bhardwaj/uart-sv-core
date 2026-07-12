@@ -78,6 +78,21 @@ Verified properties:
 
 ### 5.2 UART Transmitter
 
+Verified using a self-checking SystemVerilog testbench.
+
+Verified properties:
+
+- Reset behaviour
+- Idle state
+- Start bit generation
+- LSB-first data transmission
+- Stop bit generation
+- tx_busy assertion/deassertion
+- Data latching during transmission
+- Mid-transmission reset
+- Ignoring tx_start while busy
+- Parameterized DATA_BITS support
+
 ### 5.3 UART Receiver
 
 ### 5.4 Top-Level UART

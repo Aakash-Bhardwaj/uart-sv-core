@@ -85,10 +85,29 @@ This architecture maintains a single clock domain and avoids internally generate
 
 ## 6. UART Transmitter
 
+The UART transmitter converts parallel input data into a serial UART frame consisting of one start bit, DATA_BITS data bits (LSB first), and one stop bit.
+
+The transmitter is implemented as a finite-state machine with four states:
+
+- IDLE
+- START_BIT
+- DATA_TX
+- STOP_BIT
+
+Transmission is synchronized using `baud_tick`, which acts as a clock-enable signal. No derived clocks are generated.
+
+During transmission:
+
+- Input data is latched into an internal shift register.
+- The current least-significant bit is transmitted.
+- The shift register shifts right after each transmitted bit.
+- A bit counter tracks the transmitted bits.
+- `tx_busy` remains asserted until the stop bit has completed.
+
+The transmitter supports back-to-back transmissions by accepting a new `tx_start` request immediately after the stop bit.
+
 ## 7. UART Receiver
 
 ## 8. Top-Level Integration
 
-## 9. Design Decisions
-
-## 10. Future Architecture Extensions
+## 9. Future Architecture Extensions
