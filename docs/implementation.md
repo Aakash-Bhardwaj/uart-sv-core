@@ -89,9 +89,9 @@ The baud generator divides the system clock to generate a periodic one-clock-cyc
 - Counter reset
 - First baud tick following reset
 
-## 3.9 Resource Utilization
+### 3.9 Resource Utilization
 
-### Synthesis Results
+#### Synthesis Results
 
 - Tool: Yosys
 - Script: `scripts/synth_baud_generator.ys`
@@ -104,7 +104,7 @@ The baud generator divides the system clock to generate a periodic one-clock-cyc
 | Combinational Cells | 42 |
 | Memory Blocks | 0 |
 
-### Cell Breakdown
+#### Cell Breakdown
 
 | Cell Type | Count |
 |-----------|------:|
@@ -115,11 +115,11 @@ The baud generator divides the system clock to generate a periodic one-clock-cyc
 | OR | 8 |
 | XOR | 8 |
 
-### Timing Analysis
+#### Timing Analysis
 
 *To be added after `uart_top` has been implemented.*
 
-### Verification Status
+#### Verification Status
 
 - [x] RTL Simulation
 - [x] Self-checking Testbench
@@ -214,9 +214,9 @@ The UART transmitter converts parallel input data into a serial UART frame consi
 - Maximum supported `DATA_BITS`.
 - Back-to-back frame transmission.
 
-## 4.10 Resource Utilization
+### 4.10 Resource Utilization
 
-### Synthesis Results
+#### Synthesis Results
 
 - Tool: Yosys
 - Script: `scripts/synth_uart_tx.ys`
@@ -229,7 +229,7 @@ The UART transmitter converts parallel input data into a serial UART frame consi
 | Combinational Cells | 55 |
 | Memory Blocks | 0 |
 
-### Cell Breakdown
+#### Cell Breakdown
 
 | Cell Type | Count |
 |-----------|------:|
@@ -246,11 +246,11 @@ The UART transmitter converts parallel input data into a serial UART frame consi
 | XNOR | 1 |
 | XOR | 1 |
 
-### Timing Analysis
+#### Timing Analysis
 
 *To be added after `uart_top` has been implemented.*
 
-### Verification Status
+#### Verification Status
 
 - [x] RTL Simulation
 - [x] Self-checking Testbench

@@ -51,14 +51,14 @@ module tb_uart_tx #(
         $fatal(1, "[TIMEOUT] Simulation hung! Watchdog triggered after %0d cycles.", TIMEOUT_CYCLES);
     end
 
-    // Synthetic Baud Generator (baud tick generated every 10 clock cycles)
+    // Synthetic Baud Generator
     initial begin
         baud_tick = 1'b0;
         forever begin
             repeat(BAUD_DIVISOR - 1) @(posedge clk);
-            baud_tick <= 1'b1; // Assert on falling edge
+            baud_tick <= 1'b1; // Assert on rising edge
             @(posedge clk);
-            baud_tick <= 1'b0; // De-assert on falling edge
+            baud_tick <= 1'b0; // De-assert on rising edge
         end
     end
 
@@ -69,7 +69,7 @@ module tb_uart_tx #(
     end
 
     // Helper Tasks
-    
+
     // Record test results
     task automatic record_test(input string test_name, input bit passed);
         begin
@@ -142,7 +142,7 @@ module tb_uart_tx #(
                 record_test("Stop Bit correctly driven HIGH", 1'b1);
             else
                 record_test("Stop Bit Failed", 1'b0);
-                
+
             // 5. Wait for the Stop Bit period to conclude so RTL returns to IDLE cleanly
             wait_baud_tick();
         end
@@ -174,18 +174,18 @@ module tb_uart_tx #(
 
         $display("\n--- TEST 3: Mid-Transmission Reset ---");
         send_byte(8'hFF);
-        
+
         while (tx === 1'b1) @(negedge clk); // Wait for Start bit
         repeat(3) wait_baud_tick();         // Let 3 bits transmit
-        
+
         @(negedge clk) rst_n = 1'b0;        // Abrupt reset
         @(posedge clk);
-        
+
         if (tx === 1'b1 && tx_busy === 1'b0)
             record_test("Hardware safely aborted transmission and returned to IDLE", 1'b1);
         else
             record_test("Hardware failed to recover from mid-frame reset", 1'b0);
-        
+
         repeat(5) @(posedge clk);
         @(negedge clk) rst_n = 1'b1;
 
@@ -201,10 +201,10 @@ module tb_uart_tx #(
                 @(negedge clk);
                 if (tx !== 1'b1 || tx_busy !== 1'b0) idle_failed = 1;
             end
-            
-            if (!idle_failed) 
+
+            if (!idle_failed)
                 record_test("IDLE state continuously holds TX high and tx_busy low", 1'b1);
-            else 
+            else
                 record_test("IDLE state drifted or glitched", 1'b0);
         end else begin
             record_test("Failed to enter IDLE state before test began", 1'b0);
@@ -217,10 +217,10 @@ module tb_uart_tx #(
                 send_byte(8'hC3);
                 verify_uart_frame(8'hC3);
             end
-            
+
             begin // THREAD 2: The Attacker
                 repeat(4) wait_baud_tick(); // Wait until FSM is deep in DATA_TX state
-                
+
                 if (tx_busy === 1'b1)
                     record_test("tx_busy is High during active transmission", 1'b1);
                 else

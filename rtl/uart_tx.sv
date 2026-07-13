@@ -10,9 +10,9 @@ module uart_tx #(
     output logic tx_busy
 );
 
-    typedef enum logic [1:0] {  IDLE, 
-                                START_BIT, 
-                                DATA_TX, 
+    typedef enum logic [1:0] {  IDLE,
+                                START_BIT,
+                                DATA_TX,
                                 STOP_BIT} state_t;
 
     state_t state, next_state;
@@ -22,7 +22,7 @@ module uart_tx #(
     logic [COUNTER_WIDTH - 1: 0] tx_bit_counter, next_tx_bit_counter;
 
     // State transition logic
-    always @(*) begin
+    always_comb begin
         next_state = state;
         next_tx = reg_tx;
         next_reg = shift_reg;
@@ -39,12 +39,12 @@ module uart_tx #(
                     next_tx = 1'b1;
                 end
             end
-            START_BIT: begin 
+            START_BIT: begin
                 if (baud_tick) begin
                    next_state = DATA_TX;
                    next_tx_bit_counter = 'd0;
                    next_tx = shift_reg[0];
-                   next_reg = shift_reg >> 1; 
+                   next_reg = shift_reg >> 1;
                 end
             end
             DATA_TX: begin
@@ -59,7 +59,7 @@ module uart_tx #(
                         next_state = DATA_TX;
                         next_tx_bit_counter = tx_bit_counter + 1;
                     end
-               end 
+               end
             end
             STOP_BIT: begin
                 next_tx = 1'b1;
@@ -74,7 +74,7 @@ module uart_tx #(
                         next_tx = 1'b1;
                     end
                 end
-            end 
+            end
             default: begin
                next_state = IDLE;
                next_tx = 1'b1;
@@ -96,7 +96,7 @@ module uart_tx #(
             state <= next_state;
             tx_bit_counter <= next_tx_bit_counter;
             reg_tx <= next_tx;
-            shift_reg <= next_reg; 
+            shift_reg <= next_reg;
         end
     end
 
@@ -105,7 +105,7 @@ module uart_tx #(
     assign tx_busy = (state != IDLE);
 
     // synthesis translate_off
-    
+
     // Parameter validation
     initial begin
         bit error_check;

@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module tb_baud_generator #(
-    // Configuration parameters 
+    // Configuration parameters
     parameter int CLOCK_FREQ_HZ = 50_000_000,
     parameter int BAUD_RATE = 115_200,
     parameter int NUM_TICKS_TO_VERIFY = 100
@@ -11,7 +11,7 @@ module tb_baud_generator #(
     localparam int EXPECTED_DIVISOR = CLOCK_FREQ_HZ / BAUD_RATE;
     localparam real CLOCK_PERIOD_NS = 1.0e9 / CLOCK_FREQ_HZ;
     localparam real HALF_PERIOD_NS  = CLOCK_PERIOD_NS / 2.0;
-    
+
     // Timeout based on expected runtime
     localparam int TIMEOUT_CYCLES = 10 + ((NUM_TICKS_TO_VERIFY + 2) * EXPECTED_DIVISOR);
 
@@ -73,7 +73,7 @@ module tb_baud_generator #(
             // Move forward one clock cycle.
             @(posedge clk);
             cycles++; // Accumulate 1 cycle
-            
+
             if (baud_tick === 1'b0) begin
                 record_test($sformatf("Tick [%0d] Pulse Width is 1 cycle", tick_number), 1'b1);
             end else begin
@@ -87,7 +87,7 @@ module tb_baud_generator #(
                 cycles++;
             end
 
-            // The loop breaks exactly when baud_tick == 1 again. 
+            // The loop breaks exactly when baud_tick == 1 again.
             // Compare the total counted cycles to the divisor.
             if (cycles == EXPECTED_DIVISOR) begin
                 record_test($sformatf("Tick [%0d] Interval is exactly %0d cycles", tick_number, EXPECTED_DIVISOR), 1'b1);
@@ -97,7 +97,7 @@ module tb_baud_generator #(
             end
         end
     endtask
-    
+
     // Main Test Sequence
     initial begin
         // Initialize stats
@@ -109,7 +109,7 @@ module tb_baud_generator #(
         rst_n = 1'b0;
         repeat(5) @(posedge clk);
         rst_n = 1'b1;
-        
+
         // Wait one cycle for synchronous reset release to settle, then verify idle state
         @(posedge clk);
         record_test("Reset Behavior: baud_tick is 0 after reset", (baud_tick === 1'b0));
@@ -146,5 +146,5 @@ module tb_baud_generator #(
 
         $finish;
     end
-    
+
 endmodule
