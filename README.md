@@ -28,12 +28,12 @@ This project emphasizes correctness, modularity, parameterization, and reproduci
 - [x] Parameterized baud rate
 - [x] Parameterized data width
 - [x] UART transmitter
-- [ ] UART receiver
+- [x] UART receiver
 - [ ] Full-duplex operation
-- [ ] 1 stop bit
+- [x] 1 stop bit
 - [ ] No parity
 - [x] Busy flag
-- [ ] Data valid flag
+- [x] Data valid flag
 
 ### Future Enhancements
 
@@ -104,10 +104,12 @@ Documentation
 - [x] UART transmitter RTL
 - [x] UART transmitter verification
 - [x] UART transmitter synthesis
-- [ ] UART receiver
+- [x] UART receiver RTL
+- [x] UART receiver verification
+- [x] UART receiver synthesis
 - [ ] Top-level integration
-- [ ] Verification
-- [ ] Synthesis
+- [ ] Top-level verification
+- [ ] Top-level synthesis
 - [ ] Static timing analysis
 
 ---

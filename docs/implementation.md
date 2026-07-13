@@ -60,7 +60,23 @@ The baud generator divides the system clock to generate a periodic one-clock-cyc
 |----------|------:|---------|
 | `baud_counter` | `COUNTER_WIDTH` | Counts system clock cycles until the baud divisor is reached. |
 
-### 3.6 Algorithm
+### 3.5 Datapath
+
+*Datapath diagram to be added during final documentation.*
+
+The baud generator datapath consists of:
+
+- Baud counter
+- Terminal-count comparator
+- Baud tick generation logic
+
+### 3.6 State Machine
+
+*FSM diagram to be added during final documentation.*
+
+The baud generator does not use a finite-state machine. Instead, it repeatedly counts system clock cycles until the configured baud divisor is reached, generates a one-clock-cycle `baud_tick`, resets the counter, and repeats.
+
+### 3.7 Algorithm
 
 1. Validate the configuration parameters.
 2. Compute `DIVISOR`.
@@ -70,7 +86,7 @@ The baud generator divides the system clock to generate a periodic one-clock-cyc
 6. Assert `baud_tick` for one system clock cycle.
 7. Reset `baud_counter` after the terminal count.
 
-### 3.7 Design Decisions
+### 3.8 Design Decisions
 
 - Counter-based clock division.
 - Single clock domain.
@@ -81,7 +97,7 @@ The baud generator divides the system clock to generate a periodic one-clock-cyc
 - Deterministic behaviour following reset.
 - Counter width derived automatically from the baud divisor.
 
-### 3.8 Corner Cases
+### 3.9 Corner Cases
 
 - Invalid `CLOCK_FREQ_HZ`
 - Invalid `BAUD_RATE`
@@ -89,7 +105,7 @@ The baud generator divides the system clock to generate a periodic one-clock-cyc
 - Counter reset
 - First baud tick following reset
 
-### 3.9 Resource Utilization
+### 3.10 Resource Utilization
 
 #### Synthesis Results
 
@@ -178,11 +194,26 @@ The UART transmitter converts parallel input data into a serial UART frame consi
 
 ### 4.5 Datapath
 
-*To be completed after the datapath diagram has been finalized.*
+*Datapath diagram to be added during final documentation.*
+
+The transmitter datapath consists of:
+
+- Shift register
+- Bit counter
+- Output registers
 
 ### 4.6 State Machine
 
-*To be completed after the FSM diagram has been finalized.*
+*FSM diagram to be added during final documentation.*
+
+The transmitter uses a four-state finite-state machine.
+
+| State | Function |
+|--------|----------|
+| `IDLE` | Waits for a transmission request |
+| `START_BIT` | Transmits the start bit |
+| `DATA_TX` | Transmits the data bits |
+| `STOP_BIT` | Transmits the stop bit and returns to `IDLE` |
 
 ### 4.7 Algorithm
 
@@ -260,7 +291,161 @@ The UART transmitter converts parallel input data into a serial UART frame consi
 
 ## 5. UART Receiver
 
-*To be completed.*
+### 5.1 Module Overview
+
+The UART receiver converts serial UART frames into parallel data. Incoming asynchronous serial data is synchronized before being sampled using the shared `baud_tick` clock-enable signal. Valid frames are presented to user logic through a handshake interface consisting of `rx_valid` and `rx_ack`.
+
+### 5.2 Interface
+
+#### Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `DATA_BITS` | Number of received data bits. |
+
+#### Inputs
+
+| Signal | Description |
+|--------|-------------|
+| `clk` | System clock |
+| `rst_n` | Active-low asynchronous reset |
+| `baud_tick` | Baud-rate enable pulse |
+| `rx` | Serial receive input |
+| `rx_ack` | Acknowledges received data |
+
+#### Outputs
+
+| Signal | Description |
+|--------|-------------|
+| `rx_data` | Parallel received data |
+| `rx_valid` | Indicates valid received data |
+| `frame_error` | Indicates an invalid stop bit |
+
+### 5.3 Internal Registers
+
+| Register | Width | Purpose |
+|----------|------:|---------|
+| `state` | `state_t` | Current FSM state |
+| `sync_ff1` | 1 | First synchronizer stage |
+| `sync_ff2` | 1 | Second synchronizer stage |
+| `rx_sync` | 1 | Synchronized receive input |
+| `prev_rx_sync` | 1 | Previous synchronized input for edge detection |
+| `shift_reg` | `DATA_BITS` | Stores received serial data |
+| `rx_bit_counter` | Depends on implementation | Counts received data bits |
+| `rx_data_reg` | `DATA_BITS` | Stores completed received byte |
+| `rx_valid_reg` | 1 | Registered valid flag |
+| `frame_error_reg` | 1 | Registered framing error flag |
+
+### 5.4 Combinational Signals
+
+| Signal | Purpose |
+|--------|---------|
+| `next_state` | Next FSM state |
+| `next_shift_reg` | Next shift register value |
+| `next_rx_bit_counter` | Next bit counter value |
+| `next_rx_data_reg` | Next received data value |
+| `next_rx_valid_reg` | Next valid flag |
+| `next_frame_error_reg` | Next framing error flag |
+
+### 5.5 Datapath
+
+*Datapath diagram to be added during final documentation.*
+
+The receiver datapath consists of:
+
+- Two-stage input synchronizer
+- Falling-edge detector
+- Shift register
+- Bit counter
+- Output registers
+
+### 5.6 State Machine
+
+*FSM diagram to be added during final documentation.*
+
+The receiver uses a four-state finite-state machine.
+
+| State | Function |
+|-------|----------|
+| `IDLE` | Waits for the start of a new frame |
+| `DATA_RX` | Receives and reconstructs serial data |
+| `STOP_BIT` | Validates the stop bit |
+| `HANDSHAKE` | Holds received data or error status until acknowledged |
+
+### 5.7 Algorithm
+
+1. Synchronize the asynchronous receive input.
+2. Detect the falling edge indicating the start bit.
+3. Receive `DATA_BITS` serial bits.
+4. Shift previously received bits toward the least-significant bit.
+5. Insert the newly received bit into the most-significant bit.
+6. Count received bits.
+7. Sample the stop bit.
+8. Assert `rx_valid` for a valid frame.
+9. Assert `frame_error` for an invalid stop bit.
+10. Hold the status until `rx_ack` is asserted.
+11. Return to the `IDLE` state.
+
+### 5.8 Design Decisions
+
+- Three-process FSM implementation.
+- Enumerated FSM states.
+- Single clock domain.
+- `baud_tick` used as a clock-enable.
+- Two-stage synchronizer for asynchronous serial input.
+- Falling-edge start-bit detection.
+- Shift-left data reconstruction with MSB insertion.
+- Handshake interface using `rx_valid` and `rx_ack`.
+- Registered error reporting.
+- Compile-time parameter validation.
+
+### 5.9 Corner Cases
+
+- Reset during reception.
+- False start-bit detection.
+- Invalid stop bit.
+- Back-to-back frame reception.
+- Minimum supported `DATA_BITS`.
+- Maximum supported `DATA_BITS`.
+
+### 5.10 Resource Utilization
+
+#### Synthesis Results
+
+- Tool: Yosys
+- Script: `scripts/synth_uart_rx.ys`
+
+| Metric | Value |
+|--------|------:|
+| Number of Ports | 8 |
+| Total Cell Count | 195 |
+| Sequential Cells | 27 |
+| Combinational Cells | 168 |
+| Memory Blocks | 0 |
+
+#### Cell Breakdown
+
+| Cell Type | Count |
+|-----------|------:|
+| AND | 48 |
+| DFFE_PNOP | 24 |
+| DFF_PN0 | 3 |
+| MUX | 64 |
+| NOT | 15 |
+| OR | 39 |
+| XOR | 2 |
+
+#### Timing Analysis
+
+*To be added after `uart_top` has been implemented.*
+
+#### Verification Status
+
+- [x] RTL Simulation
+- [x] Self-checking Testbench
+- [ ] Assertions
+- [x] Synthesis
+- [ ] Static Timing Analysis
 
 ## 6. UART Top-Level
 

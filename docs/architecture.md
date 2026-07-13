@@ -108,6 +108,33 @@ The transmitter supports back-to-back transmissions by accepting a new `tx_start
 
 ## 7. UART Receiver
 
+The UART receiver converts incoming serial UART frames into parallel data consisting of one start bit, `DATA_BITS` data bits (LSB first), and one stop bit.
+
+Incoming serial data is synchronized using a two-stage flip-flop synchronizer before being processed by the receiver state machine.
+
+The receiver is implemented as a finite-state machine with four states:
+
+- IDLE
+- DATA_RX
+- STOP_BIT
+- HANDSHAKE
+
+Reception is synchronized using `baud_tick`, which acts as a clock-enable signal. No derived clocks are generated.
+
+During reception:
+
+- Incoming serial data is synchronized before sampling.
+- A falling edge on the synchronized input initiates frame reception.
+- Data bits are sampled on successive `baud_tick` pulses.
+- Previously received bits shift toward the least-significant bit while the newly received bit is inserted into the most-significant bit of the shift register.
+- A bit counter tracks the number of received data bits.
+- The stop bit is validated after all data bits have been received.
+- `rx_valid` is asserted following successful reception of a complete frame.
+- `frame_error` is asserted if the received stop bit is invalid.
+- Received data and status are held until acknowledged through `rx_ack`.
+
+This architecture maintains a single clock domain and avoids internally generated clocks.
+
 ## 8. Top-Level Integration
 
 ## 9. Future Architecture Extensions

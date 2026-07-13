@@ -27,6 +27,8 @@ The UART SV Core shall:
 - Transmitter shall accept a transmission request only while idle.
 - Operate entirely within a single clock domain.
 - Keep the transmission line high while idle.
+- Generate a `frame_error` status signal for invalid stop bits.
+- Hold `rx_valid` asserted until acknowledged through `rx_ack`.
 
 ## 4. Parameters
 
@@ -91,6 +93,7 @@ The following assumptions apply to Version 1.0:
 - Baud-rate mismatch between communicating devices remains within UART tolerance.
 - External serial inputs are synchronized before use within the receiver.
 - The transmitter shall ignore new transmission requests while `tx_busy` is asserted.
+- The receiver samples the synchronized serial input using the shared `baud_tick` signal.
 
 ## 9. Future Enhancements
 

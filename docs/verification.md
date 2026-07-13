@@ -95,6 +95,21 @@ Verified properties:
 
 ### 5.3 UART Receiver
 
+Verified using a self-checking SystemVerilog testbench.
+
+Verified properties:
+
+- Reset behaviour
+- Single-frame reception
+- Multiple payload reception
+- rx_valid assertion
+- rx_valid handshake
+- Data stability before acknowledgement
+- Frame error detection
+- False start detection
+- Mid-frame reset
+- Back-to-back frame reception
+
 ### 5.4 Top-Level UART
 
 ## 6. Assertions
