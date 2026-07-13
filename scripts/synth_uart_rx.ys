@@ -1,4 +1,4 @@
-# Yosys synthesis script for Baud Generator
+# Yosys synthesis script for UART Transmitter
 
 # 1. Read SystemVerilog design
 read_verilog -sv rtl/uart_rx.sv
@@ -7,13 +7,19 @@ read_verilog -sv rtl/uart_rx.sv
 hierarchy -check -top uart_rx
 
 # 3. High-level synthesis (translates processes to netlists)
-proc; opt; memory; opt; fsm; opt
+proc
+opt
+memory
+opt
+fsm
+opt
 
 # 4. Map to generic logic gates
-techmap; opt
+techmap
+opt
 
 # 5. Print statistics (Resource usage)
 stat
 
 # 6. Write synthesized netlist (optional, useful for gate-level sim)
-write_verilog -noattr reports/baud_generator_synth.v
+write_verilog -noattr reports/uart_rx_synth.v

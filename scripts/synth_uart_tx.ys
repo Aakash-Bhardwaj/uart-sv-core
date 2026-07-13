@@ -1,4 +1,4 @@
-# Yosys synthesis script for Baud Generator
+# Yosys synthesis script for UART Transmitter
 
 # Read RTL
 read_verilog -sv rtl/uart_tx.sv
