@@ -137,4 +137,26 @@ This architecture maintains a single clock domain and avoids internally generate
 
 ## 8. Top-Level Integration
 
+The `uart_top` module integrates the baud generator, UART transmitter, and UART receiver into a reusable UART IP core.
+
+The baud generator produces a shared `baud_tick` signal that is distributed to both the transmitter and receiver as a clock-enable signal. All modules operate using the same system clock, maintaining a single synchronous clock domain throughout the design.
+
+The top-level module contains no additional datapath or control logic. Its primary responsibilities are:
+
+- Instantiating each submodule.
+- Passing configuration parameters to the submodules.
+- Routing the shared `baud_tick` signal.
+- Connecting the external transmit and receive interfaces.
+
+The transmitter and receiver operate independently, allowing simultaneous transmission and reception (full-duplex operation).
+
+The top-level module exposes a clean interface consisting of:
+
+- System clock and reset.
+- Transmit control and data interface.
+- Receive data and handshake interface.
+- Serial transmit and receive signals.
+
+This modular architecture allows each submodule to be verified independently while enabling straightforward system-level integration and reuse.
+
 ## 9. Future Architecture Extensions

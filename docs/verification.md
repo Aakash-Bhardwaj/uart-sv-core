@@ -112,7 +112,24 @@ Verified properties:
 
 ### 5.4 Top-Level UART
 
+Verified using a self-checking SystemVerilog integration testbench.
+
+Verified properties:
+
+- Reset behaviour
+- End-to-end loopback communication
+- Single-frame transmission
+- Multiple payload transmission
+- Back-to-back frame transmission
+- `rx_valid` handshake
+- Data stability before acknowledgement
+- Simultaneous transmitter and receiver operation
+- Mid-transmission reset
+- Parameterized integration
+
 ## 6. Assertions
+
+*To be added soon.*
 
 ## 7. Coverage Goals
 

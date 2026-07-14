@@ -29,9 +29,9 @@ This project emphasizes correctness, modularity, parameterization, and reproduci
 - [x] Parameterized data width
 - [x] UART transmitter
 - [x] UART receiver
-- [ ] Full-duplex operation
+- [x] Full-duplex operation
 - [x] 1 stop bit
-- [ ] No parity
+- [x] No parity
 - [x] Busy flag
 - [x] Data valid flag
 
@@ -107,9 +107,9 @@ Documentation
 - [x] UART receiver RTL
 - [x] UART receiver verification
 - [x] UART receiver synthesis
-- [ ] Top-level integration
-- [ ] Top-level verification
-- [ ] Top-level synthesis
+- [x] Top-level integration
+- [x] Top-level verification
+- [x] Top-level synthesis
 - [ ] Static timing analysis
 
 ---

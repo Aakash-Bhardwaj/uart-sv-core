@@ -1,0 +1,28 @@
+# Yosys synthesis script for UART Top
+
+# 1. Read SystemVerilog design
+read_verilog -sv rtl/baud_generator.sv
+read_verilog -sv rtl/uart_tx.sv
+read_verilog -sv rtl/uart_rx.sv
+read_verilog -sv rtl/uart_top.sv
+
+# 2. Check design hierarchy
+hierarchy -check -top uart_top
+
+# 3. High-level synthesis (translates processes to netlists)
+proc
+opt
+memory
+opt
+fsm
+opt
+
+# 4. Map to generic logic gates
+techmap
+opt
+
+# 5. Print statistics (Resource usage)
+stat
+
+# 6. Write synthesized netlist (optional, useful for gate-level sim)
+write_verilog -noattr reports/uart_top_synth.v
