@@ -1,0 +1,92 @@
+OpenSTA 2.0.17 GITDIR-NOT Copyright (c) 2019, Parallax Software, Inc.
+License GPLv3: GNU GPL version 3 <http://gnu.org/licenses/gpl.html>
+
+This is free software, and you are free to change and redistribute it
+under certain conditions; type `show_copying' for details. 
+This program comes with ABSOLUTELY NO WARRANTY; for details type `show_warranty'.
+Error: uart_top.sdc, 8 invalid command name "remove_from_collection"
+
+============ SETUP PATHS ==============
+Startpoint: bg/_37_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: u_rx/_133_ (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout      Cap     Slew    Delay     Time   Description
+--------------------------------------------------------------------------------
+                  0.000    0.000    0.000   clock clk (rise edge)
+                           0.000    0.000   clock network delay (ideal)
+                  0.000    0.000    0.000 ^ bg/_37_/CLK (sky130_fd_sc_hdll__dfrtp_1)
+                  0.960    0.716    0.716 ^ bg/_37_/Q (sky130_fd_sc_hdll__dfrtp_1)
+    6    0.067                              bg/baud_counter[0] (net)
+                  0.960    0.002    0.718 ^ bg/_17_/B (sky130_fd_sc_hdll__and4b_1)
+                  0.083    0.297    1.015 ^ bg/_17_/X (sky130_fd_sc_hdll__and4b_1)
+    1    0.002                              bg/_03_ (net)
+                  0.083    0.003    1.018 ^ bg/_18_/C (sky130_fd_sc_hdll__and3_1)
+                  1.739    0.925    1.943 ^ bg/_18_/X (sky130_fd_sc_hdll__and3_1)
+   24    0.109                              baud_tick (net)
+                  1.739    0.001    1.945 ^ u_rx/_066_/C_N (sky130_fd_sc_hdll__nor4bb_1)
+                  5.477    2.834    4.778 ^ u_rx/_066_/Y (sky130_fd_sc_hdll__nor4bb_1)
+   12    0.080                              u_rx/_039_ (net)
+                  5.477    0.002    4.780 ^ u_rx/_106_/A3 (sky130_fd_sc_hdll__a31oi_1)
+                  0.571    0.326    5.107 v u_rx/_106_/Y (sky130_fd_sc_hdll__a31oi_1)
+    1    0.002                              u_rx/_026_ (net)
+                  0.571    0.004    5.111 v u_rx/_107_/B (sky130_fd_sc_hdll__nor2_1)
+                  0.182    0.222    5.333 ^ u_rx/_107_/Y (sky130_fd_sc_hdll__nor2_1)
+    1    0.002                              u_rx/_023_ (net)
+                  0.182    0.004    5.337 ^ u_rx/_133_/D (sky130_fd_sc_hdll__dfrtp_1)
+                                    5.337   data arrival time
+
+                  0.000   20.000   20.000   clock clk (rise edge)
+                           0.000   20.000   clock network delay (ideal)
+                           0.000   20.000   clock reconvergence pessimism
+                                   20.000 ^ u_rx/_133_/CLK (sky130_fd_sc_hdll__dfrtp_1)
+                          -0.099   19.901   library setup time
+                                   19.901   data required time
+--------------------------------------------------------------------------------
+                                   19.901   data required time
+                                   -5.337   data arrival time
+--------------------------------------------------------------------------------
+                                   14.565   slack (MET)
+
+
+
+============= HOLD PATHS ==============
+Startpoint: u_rx/_119_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: rx_data[0] (output port clocked by clk)
+Path Group: clk
+Path Type: min
+
+Fanout      Cap     Slew    Delay     Time   Description
+--------------------------------------------------------------------------------
+                  0.000    0.000    0.000   clock clk (rise edge)
+                           0.000    0.000   clock network delay (ideal)
+                  0.000    0.000    0.000 ^ u_rx/_119_/CLK (sky130_fd_sc_hdll__dfrtp_1)
+                  0.073    0.320    0.320 ^ u_rx/_119_/Q (sky130_fd_sc_hdll__dfrtp_1)
+    2    0.003                              rx_data[0] (net)
+                  0.073    0.000    0.320 ^ rx_data[0] (out)
+                                    0.320   data arrival time
+
+                  0.000    0.000    0.000   clock clk (rise edge)
+                           0.000    0.000   clock network delay (ideal)
+                           0.000    0.000   clock reconvergence pessimism
+                           0.000    0.000   output external delay
+                                    0.000   data required time
+--------------------------------------------------------------------------------
+                                    0.000   data required time
+                                   -0.320   data arrival time
+--------------------------------------------------------------------------------
+                                    0.320   slack (MET)
+
+
+
+=========== WORST SLACK ===============
+worst slack 14.56
+
+================ TNS ==================
+tns 0.00
+
+================ wNS ==================
+wns 0.00
+[?2004hOpenSTA> exit
+[?2004lSaving command history

@@ -131,17 +131,13 @@ The baud generator does not use a finite-state machine. Instead, it repeatedly c
 | OR | 8 |
 | XOR | 8 |
 
-#### Timing Analysis
-
-*To be added after `uart_top` has been implemented.*
-
 #### Verification Status
 
 - [x] RTL Simulation
 - [x] Self-checking Testbench
 - [ ] Assertions
 - [x] Synthesis
-- [ ] Static Timing Analysis
+- [x] Static Timing Analysis
 
 ## 4. UART Transmitter
 
@@ -277,17 +273,13 @@ The transmitter uses a four-state finite-state machine.
 | XNOR | 1 |
 | XOR | 1 |
 
-#### Timing Analysis
-
-*To be added after `uart_top` has been implemented.*
-
 #### Verification Status
 
 - [x] RTL Simulation
 - [x] Self-checking Testbench
 - [ ] Assertions
 - [x] Synthesis
-- [ ] Static Timing Analysis
+- [x] Static Timing Analysis
 
 ## 5. UART Receiver
 
@@ -435,17 +427,13 @@ The receiver uses a four-state finite-state machine.
 | OR | 39 |
 | XOR | 2 |
 
-#### Timing Analysis
-
-*To be added after `uart_top` has been implemented.*
-
 #### Verification Status
 
 - [x] RTL Simulation
 - [x] Self-checking Testbench
 - [ ] Assertions
 - [x] Synthesis
-- [ ] Static Timing Analysis
+- [x] Static Timing Analysis
 
 ## 6. UART Top-Level
 
@@ -570,18 +558,47 @@ The top-level module instantiates:
 | OR | 94 |
 | XOR | 12 |
 
-#### Timing Analysis
-
-*To be added after OpenSTA timing analysis.*
-
 #### Verification Status
 
 - [x] RTL Simulation
 - [x] Self-checking Testbench
 - [ ] Assertions
 - [x] Synthesis
-- [ ] Static Timing Analysis
+- [x] Static Timing Analysis
 
-## 7. Future Improvements
+## 7. Technology Mapped Synthesis
+
+- Tool: Yosys
+- Technology: Sky130 HDLL
+- Script: `scripts/synth_sky130.ys`
+- Total Cell Count: 172
+- Total Area: 2204.6144 µm²
+
+| Module         | Cell Count | Area (µm²) |
+| -------------- | ---------: | ---------: |
+| Baud Generator |         32 |   402.8864 |
+| UART TX        |         59 |   669.3920 |
+| UART RX        |         81 |  1132.3360 |
+| UART Top       |        172 |  2204.6144 |
+
+## 8. Static Timing Analysis
+
+- Tool: OpenSTA
+- Library: Sky130 HDLL TT
+- Script: `scripts/timing_uart.tcl`
+- Voltage: 1.8 V
+- Temperature: 25°C
+- Clock period: 20 ns (50 MHz)
+
+Results:
+
+- Setup timing: PASS
+- Worst setup slack: 14.565 ns
+- WNS: 0.00 ns
+- TNS: 0.00 ns
+
+No setup timing violations were observed under the applied timing constraints.
+
+## 9. Future Improvements
 
 This document will be extended as additional UART features such as parity, FIFOs, configurable stop bits, and flow control are implemented.

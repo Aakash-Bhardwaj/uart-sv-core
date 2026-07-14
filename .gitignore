@@ -20,6 +20,7 @@ build/
 
 # OpenSTA
 *.rpt
+.history_sta
 
 # Temporary files
 *.tmp

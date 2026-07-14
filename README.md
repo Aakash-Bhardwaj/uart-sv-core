@@ -110,7 +110,7 @@ Documentation
 - [x] Top-level integration
 - [x] Top-level verification
 - [x] Top-level synthesis
-- [ ] Static timing analysis
+- [x] Static timing analysis
 
 ---
 

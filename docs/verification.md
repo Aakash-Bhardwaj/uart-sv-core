@@ -149,7 +149,19 @@ Verification is considered complete when:
 - Synthesis completes successfully.
 - Static timing analysis reports no timing violations.
 
-## 9. Future Verification Enhancements
+## 9. Static Timing Analysis Results
+
+Static timing analysis was performed using OpenSTA with the Sky130 HDLL
+standard-cell timing library.
+
+Results:
+
+- Worst Negative Slack (WNS): 0.00 ns
+- Total Negative Slack (TNS): 0.00 ns
+- Worst setup slack: 14.565 ns
+- No setup timing violations observed under the applied timing constraints.
+
+## 10. Future Verification Enhancements
 
 - UVM
 - Cocotb

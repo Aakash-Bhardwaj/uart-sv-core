@@ -1,0 +1,42 @@
+# Yosys Synthesis Script uart_top
+# Technology : Sky130 HDLL
+
+# Read Sky130 library
+read_liberty -lib \
+/usr/local/share/pdk/sky130A/libs.ref/sky130_fd_sc_hdll/lib/sky130_fd_sc_hdll__tt_025C_1v80.lib
+
+# Read RTL
+read_verilog -sv rtl/baud_generator.sv
+read_verilog -sv rtl/uart_tx.sv
+read_verilog -sv rtl/uart_rx.sv
+read_verilog -sv rtl/uart_top.sv
+
+hierarchy -check -top uart_top
+
+# Synthesis
+proc
+opt
+fsm
+opt
+memory
+opt
+techmap
+opt
+
+# Technology mapping
+dfflibmap \
+-liberty /usr/local/share/pdk/sky130A/libs.ref/sky130_fd_sc_hdll/lib/sky130_fd_sc_hdll__tt_025C_1v80.lib
+
+abc \
+-liberty /usr/local/share/pdk/sky130A/libs.ref/sky130_fd_sc_hdll/lib/sky130_fd_sc_hdll__tt_025C_1v80.lib
+
+clean
+
+# Reports
+stat \
+-liberty /usr/local/share/pdk/sky130A/libs.ref/sky130_fd_sc_hdll/lib/sky130_fd_sc_hdll__tt_025C_1v80.lib
+
+check
+
+# Output
+write_verilog -noattr reports/uart_top_sky130_synth.v
