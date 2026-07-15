@@ -41,6 +41,21 @@ module tb_uart_tx #(
         .tx_busy(tx_busy)
     );
 
+    // Assertions
+    sva_uart_tx #(
+        .DATA_BITS(DATA_BITS)
+    ) sva (
+        .clk(clk),
+        .rst_n(rst_n),
+        .baud_tick(baud_tick),
+        .tx_start(tx_start),
+        .tx(tx),
+        .tx_busy(tx_busy),
+        .shift_reg(dut.shift_reg),
+        .tx_bit_counter(dut.tx_bit_counter),
+        .state(dut.state)
+    );
+
     // Clock generation
     initial clk = 1'b0;
     always #(HALF_PERIOD_NS) clk = ~clk;
@@ -48,7 +63,7 @@ module tb_uart_tx #(
     // Timeout watchdog
     initial begin
         repeat(TIMEOUT_CYCLES) @(posedge clk);
-        $fatal(1, "[TIMEOUT] Simulation hung! Watchdog triggered after %0d cycles.", TIMEOUT_CYCLES);
+        $fatal(1, "[TIMEOUT] Simulation hung! Watchdog triggered after %0d cycles.",TIMEOUT_CYCLES);
     end
 
     // Synthetic Baud Generator
@@ -132,9 +147,11 @@ module tb_uart_tx #(
             end
 
             if (received_data === expected_data)
-                record_test($sformatf("Payload Match: Expected %h, Got %h", expected_data, received_data), 1'b1);
+                record_test($sformatf("Payload Match: Expected %h, Got %h",
+                                        expected_data, received_data), 1'b1);
             else
-                record_test($sformatf("Payload Mismatch: Expected %h, Got %h", expected_data, received_data), 1'b0);
+                record_test($sformatf("Payload Mismatch: Expected %h, Got %h",
+                                        expected_data, received_data), 1'b0);
 
             // 4. Verify Stop Bit
             // Because the loop just ended with wait_baud_tick(), we are 1 cycle into the Stop Bit.
@@ -232,7 +249,7 @@ module tb_uart_tx #(
 
         repeat(2) wait_baud_tick();
         if (tx === 1'b1 && tx_busy === 1'b0)
-            record_test("Transmitter successfully ignored rogue tx_start and safely returned to IDLE", 1'b1);
+            record_test("Transmitter ignored rogue tx_start and returned to IDLE", 1'b1);
         else
             record_test("Transmitter erroneously started transmitting the rogue payload", 1'b0);
 
