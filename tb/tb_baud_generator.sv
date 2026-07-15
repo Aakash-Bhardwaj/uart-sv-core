@@ -35,6 +35,17 @@ module tb_baud_generator #(
         .baud_tick(baud_tick)
     );
 
+    // Assertions
+    sva_baud_generator #(
+        .CLOCK_FREQ_HZ(CLOCK_FREQ_HZ),
+        .BAUD_RATE(BAUD_RATE)
+    ) sva (
+        .clk(clk),
+        .rst_n(rst_n),
+        .baud_tick(baud_tick),
+        .counter(dut.baud_counter)
+    );
+
     // Clock generation
     initial clk = 1'b0;
     always #(HALF_PERIOD_NS) clk = ~clk;
@@ -48,7 +59,8 @@ module tb_baud_generator #(
     // Watchdog Timer
     initial begin
         repeat (TIMEOUT_CYCLES) @(posedge clk);
-        $fatal(1, "[TIMEOUT] Simulation timed out after %0d cycles. Measurement logic failed.", TIMEOUT_CYCLES);
+        $fatal(1, "[TIMEOUT] Simulation timed out after %0d cycles. Measurement logic failed.",
+                TIMEOUT_CYCLES);
     end
 
     // Record test results
@@ -77,7 +89,8 @@ module tb_baud_generator #(
             if (baud_tick === 1'b0) begin
                 record_test($sformatf("Tick [%0d] Pulse Width is 1 cycle", tick_number), 1'b1);
             end else begin
-                record_test($sformatf("Tick [%0d] Pulse Width is wider than 1 cycle", tick_number), 1'b0);
+                record_test($sformatf("Tick [%0d] Pulse Width is wider than 1 cycle", tick_number),
+                                        1'b0);
             end
 
             // 2. Interval Measurement
@@ -90,9 +103,11 @@ module tb_baud_generator #(
             // The loop breaks exactly when baud_tick == 1 again.
             // Compare the total counted cycles to the divisor.
             if (cycles == EXPECTED_DIVISOR) begin
-                record_test($sformatf("Tick [%0d] Interval is exactly %0d cycles", tick_number, EXPECTED_DIVISOR), 1'b1);
+                record_test($sformatf("Tick [%0d] Interval is exactly %0d cycles", tick_number,
+                                        EXPECTED_DIVISOR), 1'b1);
             end else begin
-                $error("[DEBUG] Tick [%0d]: Expected interval = %0d, Measured = %0d", tick_number, EXPECTED_DIVISOR, cycles);
+                $error("[DEBUG] Tick [%0d]: Expected interval = %0d, Measured = %0d", tick_number,
+                                        EXPECTED_DIVISOR, cycles);
                 record_test($sformatf("Tick [%0d] Interval Check", tick_number), 1'b0);
             end
         end
