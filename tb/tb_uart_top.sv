@@ -55,6 +55,20 @@ module tb_uart_top #(
         .frame_error(frame_error)
     );
 
+    // Assertions
+    sva_uart_top #(
+        .DATA_BITS(DATA_BITS)
+    ) sva (
+        .clk(clk),
+        .rst_n(rst_n),
+        .tx(tx),
+        .tx_busy(tx_busy),
+        .rx(rx),
+        .rx_data(rx_data),
+        .rx_valid(rx_valid),
+        .frame_error(frame_error)
+    );
+
     // Loopback connection
     assign rx = tx;
 
