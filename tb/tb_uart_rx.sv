@@ -48,6 +48,23 @@ module tb_uart_rx #(
         .frame_error(frame_error)
     );
 
+    // Assertions
+    sva_uart_rx #(
+        .DATA_BITS(DATA_BITS)
+    ) sva (
+        .clk(clk),
+        .rst_n(rst_n),
+        .baud_tick(baud_tick),
+        .rx_sync(dut.rx_sync),
+        .rx_ack(rx_ack),
+        .shift_reg(dut.shift_reg),
+        .rx_data(rx_data),
+        .rx_bit_counter(dut.rx_bit_counter),
+        .rx_valid(rx_valid),
+        .frame_error(frame_error),
+        .state(dut.state)
+    );
+
     // Clock generation
     initial clk = 1'b0;
     always #(HALF_PERIOD_NS) clk = ~clk;
