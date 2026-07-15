@@ -12,7 +12,7 @@ Verification shall follow a layered approach consisting of:
 
 - Directed testing
 - Self-checking testbenches
-- Assertions
+- Immediate SystemVerilog assertions
 - Waveform analysis
 - Synthesis using Yosys
 - Static timing analysis using OpenSTA
@@ -129,7 +129,19 @@ Verified properties:
 
 ## 6. Assertions
 
-*To be added soon.*
+Immediate SystemVerilog assertions were implemented to verify key design invariants during simulation.
+
+Verified properties:
+
+- Reset behaviour
+- Counter bounds
+- FSM consistency
+- Output validity
+- Detection of unknown (`X/Z`) values
+- Mutual exclusion of status signals
+- Loopback integration invariants
+
+All assertions passed during simulation.
 
 ## 7. Coverage Goals
 

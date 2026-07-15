@@ -60,9 +60,7 @@ The baud generator divides the system clock to generate a periodic one-clock-cyc
 |----------|------:|---------|
 | `baud_counter` | `COUNTER_WIDTH` | Counts system clock cycles until the baud divisor is reached. |
 
-### 3.5 Datapath
-
-*Datapath diagram to be added during final documentation.*
+### 3.5 Datapath & Flow
 
 The baud generator datapath consists of:
 
@@ -70,13 +68,11 @@ The baud generator datapath consists of:
 - Terminal-count comparator
 - Baud tick generation logic
 
-### 3.6 State Machine
-
-*FSM diagram to be added during final documentation.*
+![Flow diagram & Datapath](./images/BAUD_GEN_FLOW.png)
 
 The baud generator does not use a finite-state machine. Instead, it repeatedly counts system clock cycles until the configured baud divisor is reached, generates a one-clock-cycle `baud_tick`, resets the counter, and repeats.
 
-### 3.7 Algorithm
+### 3.6 Algorithm
 
 1. Validate the configuration parameters.
 2. Compute `DIVISOR`.
@@ -86,7 +82,7 @@ The baud generator does not use a finite-state machine. Instead, it repeatedly c
 6. Assert `baud_tick` for one system clock cycle.
 7. Reset `baud_counter` after the terminal count.
 
-### 3.8 Design Decisions
+### 3.7 Design Decisions
 
 - Counter-based clock division.
 - Single clock domain.
@@ -97,7 +93,7 @@ The baud generator does not use a finite-state machine. Instead, it repeatedly c
 - Deterministic behaviour following reset.
 - Counter width derived automatically from the baud divisor.
 
-### 3.9 Corner Cases
+### 3.8 Corner Cases
 
 - Invalid `CLOCK_FREQ_HZ`
 - Invalid `BAUD_RATE`
@@ -105,7 +101,7 @@ The baud generator does not use a finite-state machine. Instead, it repeatedly c
 - Counter reset
 - First baud tick following reset
 
-### 3.10 Resource Utilization
+### 3.9 Resource Utilization
 
 #### Synthesis Results
 
@@ -131,11 +127,15 @@ The baud generator does not use a finite-state machine. Instead, it repeatedly c
 | OR | 8 |
 | XOR | 8 |
 
+#### Waveform
+
+![Waveform](./images/baud_generator_waveform.png)
+
 #### Verification Status
 
 - [x] RTL Simulation
 - [x] Self-checking Testbench
-- [ ] Assertions
+- [x] Assertions
 - [x] Synthesis
 - [x] Static Timing Analysis
 
@@ -188,9 +188,7 @@ The UART transmitter converts parallel input data into a serial UART frame consi
 | `next_tx` | Next transmit output |
 | `next_tx_busy` | Next busy flag |
 
-### 4.5 Datapath
-
-*Datapath diagram to be added during final documentation.*
+### 4.5 Datapath & State Machine
 
 The transmitter datapath consists of:
 
@@ -198,9 +196,7 @@ The transmitter datapath consists of:
 - Bit counter
 - Output registers
 
-### 4.6 State Machine
-
-*FSM diagram to be added during final documentation.*
+![FSM & Datapath](./images/uart_tx_fsm.png)
 
 The transmitter uses a four-state finite-state machine.
 
@@ -211,7 +207,7 @@ The transmitter uses a four-state finite-state machine.
 | `DATA_TX` | Transmits the data bits |
 | `STOP_BIT` | Transmits the stop bit and returns to `IDLE` |
 
-### 4.7 Algorithm
+### 4.6 Algorithm
 
 1. Wait for `tx_start` while in the `IDLE` state.
 2. Latch `tx_data` into the shift register.
@@ -222,7 +218,7 @@ The transmitter uses a four-state finite-state machine.
 7. Transmit the stop bit.
 8. Return to the `IDLE` state.
 
-### 4.8 Design Decisions
+### 4.7 Design Decisions
 
 - Three-process FSM implementation.
 - Enumerated FSM states.
@@ -233,7 +229,7 @@ The transmitter uses a four-state finite-state machine.
 - Ignore `tx_start` while busy.
 - Support back-to-back transmissions.
 
-### 4.9 Corner Cases
+### 4.8 Corner Cases
 
 - Reset during transmission.
 - Repeated `tx_start` assertions.
@@ -241,7 +237,7 @@ The transmitter uses a four-state finite-state machine.
 - Maximum supported `DATA_BITS`.
 - Back-to-back frame transmission.
 
-### 4.10 Resource Utilization
+### 4.9 Resource Utilization
 
 #### Synthesis Results
 
@@ -273,11 +269,15 @@ The transmitter uses a four-state finite-state machine.
 | XNOR | 1 |
 | XOR | 1 |
 
+#### Waveform
+
+![Waveform](./images/uart_tx_waveform.png)
+
 #### Verification Status
 
 - [x] RTL Simulation
 - [x] Self-checking Testbench
-- [ ] Assertions
+- [x] Assertions
 - [x] Synthesis
 - [x] Static Timing Analysis
 
@@ -339,9 +339,7 @@ The UART receiver converts serial UART frames into parallel data. Incoming async
 | `next_rx_valid_reg` | Next valid flag |
 | `next_frame_error_reg` | Next framing error flag |
 
-### 5.5 Datapath
-
-*Datapath diagram to be added during final documentation.*
+### 5.5 Datapath & State Machine
 
 The receiver datapath consists of:
 
@@ -351,9 +349,7 @@ The receiver datapath consists of:
 - Bit counter
 - Output registers
 
-### 5.6 State Machine
-
-*FSM diagram to be added during final documentation.*
+![FSM & Datapath](./images/uart_rx_fsm.png)
 
 The receiver uses a four-state finite-state machine.
 
@@ -364,7 +360,7 @@ The receiver uses a four-state finite-state machine.
 | `STOP_BIT` | Validates the stop bit |
 | `HANDSHAKE` | Holds received data or error status until acknowledged |
 
-### 5.7 Algorithm
+### 5.6 Algorithm
 
 1. Synchronize the asynchronous receive input.
 2. Detect the falling edge indicating the start bit.
@@ -378,7 +374,7 @@ The receiver uses a four-state finite-state machine.
 10. Hold the status until `rx_ack` is asserted.
 11. Return to the `IDLE` state.
 
-### 5.8 Design Decisions
+### 5.7 Design Decisions
 
 - Three-process FSM implementation.
 - Enumerated FSM states.
@@ -391,7 +387,7 @@ The receiver uses a four-state finite-state machine.
 - Registered error reporting.
 - Compile-time parameter validation.
 
-### 5.9 Corner Cases
+### 5.8 Corner Cases
 
 - Reset during reception.
 - False start-bit detection.
@@ -400,7 +396,7 @@ The receiver uses a four-state finite-state machine.
 - Minimum supported `DATA_BITS`.
 - Maximum supported `DATA_BITS`.
 
-### 5.10 Resource Utilization
+### 5.9 Resource Utilization
 
 #### Synthesis Results
 
@@ -427,11 +423,15 @@ The receiver uses a four-state finite-state machine.
 | OR | 39 |
 | XOR | 2 |
 
+#### Waveform
+
+![Waveform](./images/uart_rx_waveform.png)
+
 #### Verification Status
 
 - [x] RTL Simulation
 - [x] Self-checking Testbench
-- [ ] Assertions
+- [x] Assertions
 - [x] Synthesis
 - [x] Static Timing Analysis
 
@@ -478,9 +478,9 @@ The `uart_top` module integrates the baud generator, UART transmitter, and UART 
 |--------|---------|
 | `baud_tick` | Shared baud-rate enable pulse generated by the baud generator |
 
-### 6.4 Datapath
+### 6.4 Datapath & Hierarchy
 
-*Datapath diagram to be added during final documentation.*
+![Hierarchy & Datapath](./images/uart_hierarchy_datapath.png)
 
 The top-level datapath consists of:
 
@@ -488,10 +488,6 @@ The top-level datapath consists of:
 - UART transmitter
 - UART receiver
 - Shared `baud_tick` interconnect
-
-### 6.5 Module Hierarchy
-
-*Hierarchy diagram to be added during final documentation.*
 
 The top-level module instantiates:
 
@@ -501,7 +497,7 @@ The top-level module instantiates:
 | `uart_tx` | Serializes and transmits parallel data |
 | `uart_rx` | Receives serial data and reconstructs parallel data |
 
-### 6.6 Algorithm
+### 6.5 Algorithm
 
 1. Validate configuration parameters.
 2. Instantiate the baud generator.
@@ -511,7 +507,7 @@ The top-level module instantiates:
 6. Forward received data and status from the UART receiver.
 7. Operate transmitter and receiver concurrently.
 
-### 6.7 Design Decisions
+### 6.6 Design Decisions
 
 - Hierarchical module integration.
 - Single clock domain.
@@ -522,7 +518,7 @@ The top-level module instantiates:
 - Modular and reusable architecture.
 - Compile-time parameter validation.
 
-### 6.8 Corner Cases
+### 6.7 Corner Cases
 
 - Invalid parameter values.
 - Reset during transmission.
@@ -530,7 +526,7 @@ The top-level module instantiates:
 - Simultaneous transmit and receive operation.
 - Back-to-back frame transmission.
 
-### 6.9 Resource Utilization
+### 6.8 Resource Utilization
 
 #### Synthesis Results
 
@@ -558,11 +554,15 @@ The top-level module instantiates:
 | OR | 94 |
 | XOR | 12 |
 
+#### Waveform
+
+![Waveform](./images/uart_top_waveform.png)
+
 #### Verification Status
 
 - [x] RTL Simulation
 - [x] Self-checking Testbench
-- [ ] Assertions
+- [x] Assertions
 - [x] Synthesis
 - [x] Static Timing Analysis
 

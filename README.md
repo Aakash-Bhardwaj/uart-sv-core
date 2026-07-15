@@ -13,7 +13,7 @@ This project emphasizes correctness, modularity, parameterization, and reproduci
 - Design a reusable UART IP core
 - Follow modern SystemVerilog coding practices
 - Develop comprehensive self-checking testbenches
-- Verify functionality using simulation and assertions
+- Verify functionality using self-checking testbenches and immediate SystemVerilog assertions
 - Perform synthesis using Yosys
 - Perform static timing analysis using OpenSTA
 - Maintain clear documentation throughout development
@@ -49,12 +49,28 @@ This project emphasizes correctness, modularity, parameterization, and reproduci
 ## Repository Structure
 
 ```
-rtl/            Synthesizable SystemVerilog RTL
-tb/             Testbenches
-docs/           Design documentation
-constraints/    Timing constraints
-scripts/        Utility scripts
+rtl/             Synthesizable SystemVerilog RTL
+tb/              Self-checking testbenches
+docs/            Project documentation
+docs/images/     Architecture, FSM, datapath and waveform figures
+constraints/     OpenSTA timing constraints
+scripts/         Synthesis and timing scripts
+reports/         Synthesis and timing reports
+assertions/      Contains immediate SystemsVerilog assertions
 ```
+
+---
+
+## Documentation
+
+The project documentation is organized into the following documents:
+
+| Document | Description |
+|----------|-------------|
+| [Specification](docs/specification.md) | Functional requirements, timing requirements, assumptions, and future enhancements. |
+| [Architecture](docs/architecture.md) | System architecture, module hierarchy, design philosophy, and integration. |
+| [Implementation](docs/implementation.md) | Detailed implementation of each module, algorithms, synthesis, timing analysis, and design decisions. |
+| [Verification Plan](docs/verification.md) | Verification methodology, test plan, synthesis validation, and timing verification. |
 
 ---
 
@@ -101,16 +117,30 @@ Documentation
 - [x] Baud generator RTL
 - [x] Baud generator verification
 - [x] Baud generator synthesis
+- [x] Baud generator assertions
 - [x] UART transmitter RTL
 - [x] UART transmitter verification
 - [x] UART transmitter synthesis
+- [x] UART transmitter assertions
 - [x] UART receiver RTL
 - [x] UART receiver verification
 - [x] UART receiver synthesis
+- [x] UART receiver assertions
 - [x] Top-level integration
 - [x] Top-level verification
 - [x] Top-level synthesis
+- [x] Top-level assertions
 - [x] Static timing analysis
+
+---
+
+## Results
+
+- All self-checking testbenches passed
+- Generic synthesis completed successfully using Yosys
+- Technology-mapped synthesis completed using Sky130 HDLL
+- Static timing analysis passed using OpenSTA
+- No setup timing violations observed
 
 ---
 
