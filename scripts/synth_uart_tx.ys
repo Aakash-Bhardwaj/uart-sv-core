@@ -13,8 +13,8 @@ fsm
 opt
 memory
 opt
-
-synth
+techmap
+opt
 
 # Statistics
 stat

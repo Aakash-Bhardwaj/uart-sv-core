@@ -9,7 +9,7 @@ read_verilog -sv rtl/uart_top.sv
 # 2. Check design hierarchy
 hierarchy -check -top uart_top
 
-# 3. High-level synthesis (translates processes to netlists)
+# 3. High-level synthesis
 proc
 opt
 memory
@@ -21,8 +21,8 @@ opt
 techmap
 opt
 
-# 5. Print statistics (Resource usage)
+# 5. Print statistics
 stat
 
-# 6. Write synthesized netlist (optional, useful for gate-level sim)
+# 6. Write synthesized netlist
 write_verilog -noattr reports/uart_top_synth.v
